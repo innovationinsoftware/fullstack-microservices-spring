@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+*.log
+
+# Environment
+.env
+.env.*
+
+# Cache
+.cache/
+
+# VCS
+.git/
+
+# Misc
+.DS_Store
+coverage/
+
+# Build output
+dist/
+build/
+
+# Editor directories
+.vscode/
+.idea/
