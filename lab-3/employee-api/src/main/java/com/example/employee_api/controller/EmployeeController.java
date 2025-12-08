@@ -12,33 +12,21 @@ import org.springframework.web.client.RestClient;
 public class EmployeeController {
     private final DiscoveryClient discoveryClient;
 	private final RestClient restClient;
-    private final CircuitBreaker employeeHoursCircuitBreaker;
 
 	public EmployeeController(DiscoveryClient discoveryClient,
-			RestClient.Builder restClientBuilder,
-        	CircuitBreakerFactory<?, ?> circuitBreakerFactory) {
+			RestClient.Builder restClientBuilder) {
 		this.discoveryClient = discoveryClient;
 		restClient = restClientBuilder.build();
-        this.employeeHoursCircuitBreaker = circuitBreakerFactory.create("employeeHours");
 	}
 
 	@GetMapping("employeeHours")
     public String employeeHours() {
-        return employeeHoursCircuitBreaker.run(
-                () -> {
-                    ServiceInstance serviceInstance =
-                            discoveryClient.getInstances("payroll-api").get(0);
+		ServiceInstance serviceInstance =
+				discoveryClient.getInstances("payroll-api").get(0);
 
-                    return restClient.get()
-                            .uri(serviceInstance.getUri() + "/hours")
-                            .retrieve()
-                            .body(String.class);
-                },
-                this::employeeHoursFallback
-        );
-    }
-
-    private String employeeHoursFallback(Throwable t) {
-        return "Employee hours service is temporarily unavailable. Please try again later.";
+		return restClient.get()
+				.uri(serviceInstance.getUri() + "/hours")
+				.retrieve()
+				.body(String.class);
     }
 }

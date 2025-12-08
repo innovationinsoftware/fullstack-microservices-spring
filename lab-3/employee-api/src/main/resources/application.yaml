@@ -1,17 +1,6 @@
 spring:
   application:
     name: employee-api
-    
-  cloud:
-    circuitbreaker:
-      resilience4j:
-        configs:
-          default:
-            slidingWindowSize: 20
-            failureRateThreshold: 50
-            waitDurationInOpenState: 30s
-        instances:
-          employeeService:
-            baseConfig: default
+
 server:
   port: 8081
