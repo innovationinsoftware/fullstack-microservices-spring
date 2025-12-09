@@ -24,3 +24,4 @@ You are now ready to start the labs.
 - [Lab 3 - Circuit Breaker](./lab-3/README.md)
 - [Lab 4 - Configuration & Logging](./lab-4/README.md)
 - [Lab 5 - Basic Repository Injection](./lab-5/README.md)
+- [Lab 6 - API Gateway and Reverse Proxy](./lab-6/README.md)
