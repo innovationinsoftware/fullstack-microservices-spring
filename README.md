@@ -21,3 +21,5 @@ You are now ready to start the labs.
 # Labs
 - [Lab 1 - Polygot](./lab-1/README.md)
 - [Lab 2 - Discovery](./lab-2/README.md)
+- [Lab 3 - Circuit Breaker](./lab-3/README.md)
+- [Lab 4 - Configuration & Logging](./lab-4/README.md)
