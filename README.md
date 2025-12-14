@@ -1,6 +1,6 @@
 # Welcome
 # Windows VMs
-Please use the information [here](./VM_Access.md) to log into your Windows VMs for class.
+Please use the information [here](./VM_Access.md) to log into your Windows VM for class.
 
 # Lab setup 
 After logging into your Windows VM, follow the instructions below. 
