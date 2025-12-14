@@ -1,4 +1,9 @@
 # Welcome
+# Windows VMs
+Please use the information [here](./VM_Access.md) to log into your Windows VMs for class.
+
+# Lab setup 
+After logging into your Windows VM, follow the instructions below. 
 This is your guid to the labs. To start with, you will need to clone the repository that contains all the lab files and instructions.
 
 1. Run PowerShell

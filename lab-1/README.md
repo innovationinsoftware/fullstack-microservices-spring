@@ -12,6 +12,8 @@ The first thing needed is to install the Remote - SSH extension.
 
 In the Remote Explorer, hover your mouse cursor over **SSH**, click on the gear icon (⚙️) in the top right corner, and select the top option. This will open the SSH configuration file in a new editor tab.
 
+# Linux VM information
+Copy the Linux VM IP from the [spreadsheet](https://docs.google.com/spreadsheets/d/1zEhmZ6hOPM5lLw_ps83L4cjUsp6bWy7weZSFXtzDLlc/edit?usp=sharing)
 
 ### Add the SSH configuration for the lab servers.
 Add the following lines to the SSH configuration file, replacing `<IP of Linux server from the spreadsheet>` with the actual IP address of your Linux server.
