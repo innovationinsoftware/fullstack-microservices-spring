@@ -21,8 +21,8 @@ Add the following lines to the SSH configuration file, replacing `<IP of Linux s
 ```plaintext
 Host Linux
   HostName <IP of Linux server from the spreadsheet>
-  IdentityFile C:\labs\keys\lab.pem
-  User TBD
+  IdentityFile "C:\Users\tekstudent\fullstack-microservices-spring\keys\lab.pem"
+  User ubuntu
 ```
 
 ### Save the SSH configuration file.
@@ -39,14 +39,14 @@ Save the changes to the SSH configuration file and close it.
 
 ### Clone the repo to Linux server
 From your VS Code session in Linux, use the git icon to clone the lab-1 repo.
-1. Click **Clone Repositories** and paste `https://github.com/scrumfish/SpringBoot-Lab-1.git`
-2. Hit **Enter** and in th epop-up windows, browse to `~/`
+1. Click **Clone Repositories** and enter `https://github.com/innovationinsoftware/fullstack-microservices-spring.git`
+2. Hit **Enter** and in the pop-up windows, accept the default location.
 3. Click **Select as repository destination**
 4. When prompted to open the cloned repo, choose **Open**
 You know have the repo on your Linux server and can modify the code in VS Code.
 
 ## Part 2 - Run Service
-1. Open the bash terminal in VS Code.
+1. Open the terminal menu in VS Code and open a new terminal.
 2. Change into the `lab-1` folder.
 3. Run `ls` to view the contents of the folder.
 
@@ -62,9 +62,13 @@ You know have the repo on your Linux server and can modify the code in VS Code.
 │   └── README.md
 └── README.md
 ```
+4. Copy .env.example to .env for the build
+```bash
+cp .env.example .env
+```
 4. Run the microservice: 
 ```bash
-docker compose up --build
+docker compose up --build -d
 ```
 
 When docker compose runs, it will build and spin up the timesheet-api service, but not the others. You will edit the docker compose file to add the Spring Boot service in a moment. For now, we'll test the service with Postman.
@@ -85,8 +89,9 @@ curl -X POST http://localhost:3000/users \
   -d '{"firstName":"Sammy","lastName":"Hagar","hoursWorked":12}'
 ```
 
-4. Finally, run the GET again and observe your new record is listed.
+4. Run the GET again and observe your new record is listed.
+5. Run `docker compose down` to stop the service.
 ## Part 4 - Add the Next Microservice
-The final part of this lab is to observe the pattern laid out for the timesheet-api and add the payroll-api to the docker-compose.yml file. Use curl to get http://localhost/8080/api/employees and verify it is working.
+The final part of this lab is to observe the pattern laid out for the timesheet-api and add the payroll-api to the docker-compose.yml file. Expose port 8080 for the Java service. Use curl to get http://localhost/8080/api/employees/hello and verify it is working.
 ## Conclusion
 In this lab you ran a simple node express based microservice, then added a Java based microservice to the infrastructure. This is an example of polygot architecture.

@@ -8,7 +8,7 @@ This Express app provides a minimal employee timesheet API.
 - Install dependencies and start the server:
 
 ```powershell
-cd employee-timesheet
+cd timesheet-api
 npm install
 npm start
 ```
