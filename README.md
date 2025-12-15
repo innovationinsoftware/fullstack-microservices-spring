@@ -7,17 +7,12 @@ After logging into your Windows VM, follow the instructions below.
 This is your guid to the labs. To start with, you will need to clone the repository that contains all the lab files and instructions.
 
 1. Run PowerShell
-2. Change to the root of drive c:
-```
-cd \
-```
+2. Stay in your "Users" folder.
 3. Clone the git repostory `git clone https://github.com/innovationinsoftware/fullstack-microservices-spring.git`
 
 ![Clone](./screenshots/Initial-Setup-Git-Clone.png)
 
 4. Change into the new directory.
-
-![CD](./screenshots/Initial-Setup-Git-Clone-Finished.png)
 
 5. Run VS Code. `code .`
 
