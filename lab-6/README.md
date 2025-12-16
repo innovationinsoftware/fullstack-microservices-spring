@@ -7,12 +7,14 @@ Use the Remote SSH extension to connect to the same Linux server you did in Lab 
 ## Step 2 - Refresh the code
 Use git to pull the latest code from GitHub so you can do this lab on the Linux server.
 
-## Step 3 - Review the files
+## Step 3 - Review the files in Lab-6
 Examine the Dockerfile in the dog-api, then look at the docker-compose.yaml
 
 Notice the difference from Lab 1. We don't expose the Java service directly, but we are using a reverse proxy.
 
 Examine the ./nginx/nginx.conf file to see how we are routing the /api/dogs to the correct service.
+
+Why do you think I put two entries into the config for the api?
 
 ## Step 4 - Run the service
 You are ready to run the service on the Linux box. Open a bash session and make sure you are in the lab-6 folder. Then run `docker compose up --build -d`
@@ -30,14 +32,14 @@ We are going to add people. They can have the following attributes:
 - Address
 - City
 - IsOwner
-- IsSelling
-- IsBuying
+- IsAdoptingIn
+- IsAdoptingOut
 
 ### Step 5.1
-Using Initialzr, create a new Java project called human-api and add it to your lab-6 folder, using VS Code to push it to your Linux VM.
+While using Initialzr would work great here, there's no easy way to push from your Windows VM to the Linux VM through VS code. So I've dropped a stubbed in API from Initialzr here, called human-api where you will track people who own, adopt, and adopt out various dogs.
 
 ### Step 5.2
-Once it is on your Linux VM you can fill in the details. You'll need:
+On your Linux VM you can fill in the details. You'll need:
 - A Human model/POJO
 - A data repository like the dogs has
 - A controller
@@ -47,7 +49,7 @@ We won't worry about Discovery with Eureka in this lab.
 ### Step 5.3
 Run and verify with curl that it is working.
 
-## Step 5.4
+### Step 5.4
 Create the Dockerfile, it should be the same as the dogs Dockerfile
 
 ## Step 6
