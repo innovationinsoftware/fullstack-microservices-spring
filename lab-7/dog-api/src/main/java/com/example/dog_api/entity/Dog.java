@@ -1,11 +1,8 @@
 package com.example.dog_api.entity;
 
-import jakarta.validation.constraints.Size;
-
 public class Dog {
     private Long id;
     private String name;
-    @Size(min = 0, max = 50)
     private String breed;
     private Integer age;
     private String color;

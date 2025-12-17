@@ -24,6 +24,11 @@ It is possible to tag the services, both at the class level, and at the method l
 ```java
 @Tag(name = "Read Operations")
 ```
+Note: will need an import for this:
+```java
+import io.swagger.v3.oas.annotations.tags.Tag;
+```
+
 2. Tag all the methods that modify data with a 'Write Operations' tag.
 3. Build and run and view the difference on the Swagger page.
 
