@@ -24,17 +24,60 @@ It is possible to tag the services, both at the class level, and at the method l
 ```java
 @Tag(name = "Read Operations")
 ```
+Note: will need an import for this:
+```java
+import io.swagger.v3.oas.annotations.tags.Tag;
+```
+
 2. Tag all the methods that modify data with a 'Write Operations' tag.
 3. Build and run and view the difference on the Swagger page.
 
 ## Step 4 - Document the Dog model
 1. Update the Dog model to have a minium and maximum string length for 'breed'.
 ```java
+import jakarta.validation.constraints.Size;
+...
 @Size(min = 0, max = 50)
 ```
 2. Build and run.
 3. Scroll down to the schema portion at the bottom of the Swagger page and expand the Dog model.
 4. Notice the additional information added to the model definition.
+
+## Step 5 - Additional Documentation
+Here we will add some licensing, support, and other docs to the Swagger page.
+1. Add a new class in your 'config' folder called `OpenApiConfig`.
+2. Add the following imports to the class file.
+```java
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.License;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+```
+3. Update the class to contain the following code.
+```java
+@Configuration
+public class OpenApiConfig {
+
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+            .info(new Info()
+                .title("Dog API")
+                .version("1.0.0")
+                .description("API documentation with OpenAPI 3 & Swagger UI")
+                .contact(new Contact()
+                    .name("API Support")
+                    .email("support@example.com"))
+                .license(new License()
+                    .name("Private")
+                    .url("http://springdoc.org")));
+    }
+}
+```
+4. Run the application and view the Swagger page.
+5. See the link to launch email and to go to a license page.
 
 # Conclusion
 Congratulations, you've added OpenAPI support to your microservice and used Swagger to help you add two new methods.
