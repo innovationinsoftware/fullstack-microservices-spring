@@ -35,6 +35,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 ## Step 4 - Document the Dog model
 1. Update the Dog model to have a minium and maximum string length for 'breed'.
 ```java
+import jakarta.validation.constraints.Size;
+...
 @Size(min = 0, max = 50)
 ```
 2. Build and run.
