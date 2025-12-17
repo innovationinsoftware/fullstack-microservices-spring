@@ -1,11 +1,6 @@
 spring:
   application:
     name: dog-api
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      database: dogdb
 
 kennel:
   name: "Happy Tails Kennel"
