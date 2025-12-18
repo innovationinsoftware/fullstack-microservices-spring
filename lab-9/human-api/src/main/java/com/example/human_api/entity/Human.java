@@ -1,17 +1,7 @@
 package com.example.human_api.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Column;
-
-@Entity
 public class Human {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 50)
     private String name;
     private boolean owner;
     private boolean adoptingOut;
