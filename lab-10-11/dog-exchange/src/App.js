@@ -1,15 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import DogList from './components/DogList';
-
-const dogsMock = [
-  { id: 1, name: 'Buddy', breed: 'Golden Retriever', age: 3, available: true },
-  { id: 2, name: 'Max', breed: 'German Shepherd', age: 5, available: false },
-  { id: 3, name: 'Bella', breed: 'Labrador Retriever', age: 2, available: true },
-];
+import { fetchDogs } from './lib/api.js';
 
 function App() {
-  const [dogs, setDogs] = useState(dogsMock);
+  const [dogs, setDogs] = useState([]);
+
+  useEffect(() => {
+    fetchDogs().then(setDogs).catch(console.error);
+  }, []);
 
   const handleAdopt = (id) => {
     setDogs(dogs.map(dog => dog.id === id ? {...dog, available: false} : dog));

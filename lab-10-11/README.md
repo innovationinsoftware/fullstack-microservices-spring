@@ -224,5 +224,149 @@ You created a React app! With the app you were able to display a list of data.
 **Stop here until instructed to do Lab 11**
 
 # Lab 11 - React and REST
-In this lab we will fetch dog data from your prior API with MongoDB.
+In this lab we will fetch dog data from your prior API with MongoDB - Lab 8.
 
+## Step 1 - Create an API library.
+Rather than have each component do `fetch` calls, we'll use a repository to centralize the REST calls.
+
+1. Off of `/src` create a folder called `lib`
+2. In `lib` create a file called `api.js`
+```javascript
+const dogUrl = 'http://localhost:8080/dogs';
+
+export async function fetchDogs() {
+    const response = await fetch(dogUrl);
+    if (!response.ok) {
+        throw new Error('Failed to fetch dogs');
+    }
+    return await response.json();
+}
+
+export async function addDog(dog) {
+    const response = await fetch(dogUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dog),
+    });
+    if (!response.ok) {
+        throw new Error('Failed to add dog');
+    }
+    return await response.json();
+}
+```
+3. Add an updateDog function.
+
+## Step 2 - Replace mock data with real data
+1. Update App.js to call fetchDogs()
+2. Use a start event hook to do this.
+```javascript
+import { useState, useEffect } from 'react';
+import './App.css';
+import DogList from './components/DogList';
+import { fetchDogs } from './lib/api.js';
+
+function App() {
+  const [dogs, setDogs] = useState([]);
+
+  useEffect(() => {
+    fetchDogs().then(setDogs).catch(console.error);
+  }, []);
+
+  const handleAdopt = (id) => {
+    setDogs(dogs.map(dog => dog.id === id ? {...dog, available: false} : dog));
+  };
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Welcome to Dog Exchange!</h1>
+        <p>Your one-stop platform for adopting and exchanging dogs.</p>
+        <DogList dogs={dogs} onAdopt={handleAdopt} />
+      </header>
+    </div>
+  );
+}
+
+export default App;
+```
+
+## Step 3 - Update Lab 8 to accept CORS connections
+In order for this to work, your dog API from Lab 8 needs to accept cross site requests. We'll make it totally permissive.
+1. Open Lab 8 in VS Code
+3. In the configuration folder add an new Configuration class called `CoresConfiguration`
+```java
+package com.example.dog_api.config;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class CorsConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+            .allowedOrigins("*")
+            .allowedMethods("*")
+            .allowedHeaders("*");
+    }
+}
+```
+4. Build and run
+## Step 4 - Verify data
+Reload your dog exchange in the browser and verify you have data.
+
+## Step 5 - Add `available` to the source data
+Update your Java app to contain the `available` boolean we are expecting. Since this is a MongoDB app, you don't have to migrate the change to the entity, just add the field and rebuild.
+
+## Step 6 - Now for the fun!
+Using everything you've leared so far, have the callback when a dog is adoptied PUT the change back to your dog API so that it persists.
+Then, try out adding a form to edit the dog, including making it availble again. The form should also work for adding a new dog.
+Hint: Add a DogEditor.css and DogEditor.js
+Here's a kickstarter for the editor:
+```javascript
+import '.DogEditor.css';
+import { useState } from 'react';
+
+const DogEditor = ({dog, onSave}) => {
+  const [name, setName] = useState(dog.name);
+  const [breed, setBreed] = useState(dog.breed);
+  const [age, setAge] = useState(dog.age);
+  const [available, setAvailable] = useState(dog.available);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSave({ ...dog, name, breed, age, available });
+  };
+    return (
+    <form className="dog-editor" onSubmit={handleSubmit}>
+        <label>
+            Name:
+            <input type="text" value={name} onChange={e => setName(e.target.value)} />
+        </label>
+        <label>
+            Breed:
+            <input type="text" value={breed} onChange={e => setBreed(e.target.value)} />
+        </label>
+        <label>
+            Age:
+            <input type="number" value={age} onChange={e => setAge(Number(e.target.value))} />
+        </label>
+        <label>
+            Available:
+            <input type="checkbox" checked={available} onChange={e => setAvailable(e.target.checked)} />
+        </label>
+        <button type="submit">Save</button>
+    </form>)
+};
+
+export default DogEditor;
+```
+
+You'll have to figure out `onSave` and refreshing the list when the data changes. I'm here to help you!
+
+# Conclusion
+Congraduations you've created a full stack application from microservice to UI.
