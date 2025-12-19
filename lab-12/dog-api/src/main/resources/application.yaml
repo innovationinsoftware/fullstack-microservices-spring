@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: dog-api
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: dogdb
+
+kennel:
+  name: "Happy Tails Kennel"
+  address: "123 Bark Street"
+  capacity: 50
+  sections:
+    - puppies
+    - adults
+    - seniors
