@@ -39,11 +39,27 @@ metadata:
   namespace: fullstack-microservices
 data:
   mongo-init.js: |
-    db.createUser({
-      user: "dbuser",
-      pwd: "dbpassword",
-      roles: [{role: "readWrite", db: "dog_db"}, {role: "readWrite", db: "human_db"}]
-    })
+    db.getSiblingDB("admin").createUser({
+      user: "admin",
+      pwd: "admin-password",
+      roles: [{role: "root", db: "admin"}]
+    });
+    db.getSiblingDB("dog_db").createUser({
+      user: "admin",
+      pwd: "admin-password",
+      roles: [{role: "readWrite", db: "dog_db"}]
+    });
+
+---
+# PostgreSQL ConfigMap for initialization
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgresql-init-config
+  namespace: fullstack-microservices
+data:
+  init-humandb.sql: |
+    CREATE DATABASE human_db;
 
 ---
 # MongoDB PersistentVolumeClaim
@@ -189,6 +205,8 @@ spec:
           volumeMounts:
             - name: postgresql-data
               mountPath: /var/lib/postgresql/data
+            - name: postgresql-init
+              mountPath: /docker-entrypoint-initdb.d
           resources:
             requests:
               memory: "256Mi"
@@ -196,6 +214,10 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "500m"
+      volumes:
+        - name: postgresql-init
+          configMap:
+            name: postgresql-init-config
   volumeClaimTemplates:
     - metadata:
         name: postgresql-data
@@ -241,20 +263,22 @@ spec:
     spec:
       containers:
         - name: dog-api
-          image: fullstack-microservices-dog-api:latest
+          image: localhost:32000/fullstack-microservices-dog-api:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:
-            - name: SPRING_DATASOURCE_URL
-              value: "jdbc:mongodb://admin:admin-password@mongodb:27017/dog_db?authSource=admin"
-            - name: SPRING_DATASOURCE_USERNAME
+            - name: SPRING_DATA_MONGODB_URI
+              value: "mongodb://admin:admin-password@mongodb:27017/dog_db?authSource=admin"
+            - name: SPRING_DATA_MONGODB_USERNAME
               value: "admin"
-            - name: SPRING_DATASOURCE_PASSWORD
+            - name: SPRING_DATA_MONGODB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mongodb-secret
                   key: mongo-root-password
+            - name: SPRING_DATA_MONGODB_DATABASE
+              value: "dog_db"
           livenessProbe:
             httpGet:
               path: /actuator/health
@@ -283,13 +307,14 @@ metadata:
   name: dog-api
   namespace: fullstack-microservices
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: dog-api
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8080
+      nodePort: 30080
 
 ---
 # Human API Deployment
@@ -312,7 +337,7 @@ spec:
     spec:
       containers:
         - name: human-api
-          image: fullstack-microservices-human-api:latest
+          image: localhost:32000/fullstack-microservices-human-api:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -329,8 +354,12 @@ spec:
                 secretKeyRef:
                   name: postgresql-secret
                   key: postgres-password
+            - name: SPRING_DATASOURCE_DRIVER_CLASS_NAME
+              value: "org.postgresql.Driver"
             - name: SPRING_JPA_HIBERNATE_DDL_AUTO
               value: "update"
+            - name: SPRING_JPA_DATABASE_PLATFORM
+              value: "org.hibernate.dialect.PostgreSQLDialect"
           livenessProbe:
             httpGet:
               path: /actuator/health
@@ -359,13 +388,14 @@ metadata:
   name: human-api
   namespace: fullstack-microservices
 spec:
-  type: ClusterIP
+  type: NodePort
   selector:
     app: human-api
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8080
+      nodePort: 30081
 
 ---
 # Ingress for external access
